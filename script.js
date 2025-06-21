@@ -94,7 +94,6 @@ class Particle {
         this.speedX = random(-0.3, 0.3);
         this.speedY = random(-1.2, -0.2);
         this.opacity = random(0.6, 1);
-        this.life = random(canvas.height * 0.6, canvas.height);
 
         switch (this.type) {
             case 'star':
@@ -123,9 +122,8 @@ class Particle {
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        this.life -= Math.abs(this.speedY) || 0.1;
 
-        if (this.y < 0 || this.life <= 0) {
+        if (this.y < 0) {
             this.reset();
         }
     }
@@ -139,7 +137,14 @@ class Particle {
 
     draw() {
         ctx.save();
-        ctx.globalAlpha = this.opacity;
+        
+        const fadeZone = canvas.height * 0.3;
+        let calculatedOpacity = this.opacity;
+        if (this.y < fadeZone) {
+            calculatedOpacity = this.opacity * (this.y / fadeZone);
+        }
+        
+        ctx.globalAlpha = calculatedOpacity;
         ctx.fillStyle = this.color;
 
         switch (this.type) {
