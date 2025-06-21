@@ -16,10 +16,9 @@ const loveWords = [
     "MI ENANA", "MI PRINCESA 💗", "MI CAMILA 💝", "MI AMOR ETERNO 💕",
     "MI DESTINO ✨", "MI FELICIDAD 💖", "MI INSPIRACIÓN 🌟", 
     "MI COMPAÑERA 💑", "MI MEJOR AMIGA 💕", "MI ALMA GEMELA 💖",
-    "MI SUEÑO HECHO REALIDAD 💫", "MI TODO 💕", "MI VIDA ENTERA 💖",
-    "MI CORAZÓN LATIENDO 💓", "MI AMOR INFINITO 💕", "MI BELLEZA ÚNICA 💖",
-    "MI ANGELITO 👼", "MI ESTRELLA ⭐", "MI LUZ 💡", "MI SONRISA 😊",
-    "MI ALEGRÍA 🎉", "MI TESORO 💎", "MI PERFECCIÓN 💖", "MI AMOR VERDADERO 💕"
+    "MI SUEÑO HECHO REALIDAD 💫", "ERES LA MEJOR", "MI VIDA ENTERA 💖",
+    "MI TESORO 💎", "MI PERFECCIÓN 💖", "MI AMOR VERDADERO 💕",
+    "CONTIGO TODO ES MEJOR", "MI LUZ EN LA OSCURIDAD", "PENSANDO EN TI"
 ];
 
 // --- UTILITY FUNCTIONS ---
@@ -256,10 +255,11 @@ class Firework {
 // --- MAIN LOGIC ---
 function init() {
     particles = [];
-    const particleCount = 150; // Reduced count to prevent crowding and improve performance
+    const particleCount = 250; // Increased count for a fuller, yet balanced, feel
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
-        const y = random(0, canvas.height);
+        // All particles now start from below the screen to create a continuous upward flow
+        const y = random(canvas.height, canvas.height + 500); 
         particles.push(new Particle(x, y));
     }
     mainHeart = new MainHeart();
