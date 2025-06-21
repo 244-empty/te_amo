@@ -84,19 +84,19 @@ class Particle {
 
     getRandomType() {
         const rand = Math.random();
-        if (rand < 0.35) return 'star'; // 35% estrellas
-        if (rand < 0.8) return 'heart'; // 45% corazones
+        if (rand < 0.5) return 'star'; // 50% estrellas (más puntos visibles)
+        if (rand < 0.8) return 'heart'; // 30% corazones
         return 'text'; // 20% texto
     }
 
     setupByType() {
         this.speedX = random(-0.3, 0.3);
         this.speedY = random(-1.2, -0.2);
-        this.opacity = random(0.6, 1);
+        this.opacity = random(0.7, 1); // Más opacidad para estrellas
 
         switch (this.type) {
             case 'star':
-                this.size = random(1.5, 3);
+                this.size = random(1.8, 3.5); // Estrellas más notorias
                 this.color = `rgba(255, 255, 255, ${this.opacity})`;
                 this.speedY = 0; // Static stars
                 this.speedX = 0;
@@ -255,7 +255,7 @@ class Firework {
 // --- MAIN LOGIC ---
 function init() {
     particles = [];
-    const particleCount = 350; // Más partículas para un fondo más vivo
+    const particleCount = 400; // Más partículas para un fondo más lleno
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
         const y = random(canvas.height, canvas.height + 500); 
