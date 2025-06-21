@@ -84,9 +84,9 @@ class Particle {
 
     getRandomType() {
         const rand = Math.random();
-        if (rand < 0.5) return 'star'; // 50% chance for a star
-        if (rand < 0.8) return 'heart'; // 30% chance for a heart
-        return 'text'; // 20% chance for text
+        if (rand < 0.35) return 'star'; // 35% estrellas
+        if (rand < 0.8) return 'heart'; // 45% corazones
+        return 'text'; // 20% texto
     }
 
     setupByType() {
@@ -255,10 +255,9 @@ class Firework {
 // --- MAIN LOGIC ---
 function init() {
     particles = [];
-    const particleCount = 250; // Increased count for a fuller, yet balanced, feel
+    const particleCount = 350; // Más partículas para un fondo más vivo
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
-        // All particles now start from below the screen to create a continuous upward flow
         const y = random(canvas.height, canvas.height + 500); 
         particles.push(new Particle(x, y));
     }
