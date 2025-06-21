@@ -8,7 +8,19 @@ let fireworks = [];
 let mainHeart;
 const mainText = "Te Amo";
 const fontName = 'Cormorant Garamond';
-const loveWords = ["MI NIÑA HERMOSA", "MY LOVE", "DUENDE MALVADA", "MI VIDA 💖", "MI CORAZÓN 💕", "BEAUTIFUL", "INTELIGENTE", "PRECIOSA", "CARIÑOSA", "AMABLE", "RISUEÑA", "ERES MI TODO", "MI MUNDO 🌍", "MI CIELO ⭐", "TALENTOSA", "DIVERTIDA", "ÚNICA", "MI REINA 👑"];
+const loveWords = [
+    "MI NIÑA HERMOSA", "MY LOVE", "DUENDE MALVADA", "MI VIDA 💖", 
+    "MI CORAZÓN 💕", "BEAUTIFUL", "INTELIGENTE", "PRECIOSA", 
+    "CARIÑOSA", "AMABLE", "RISUEÑA", "ERES MI TODO", "MI MUNDO 🌍", 
+    "MI CIELO ⭐", "TALENTOSA", "DIVERTIDA", "ÚNICA", "MI REINA 👑",
+    "MI ENANA", "MI PRINCESA 💗", "MI CAMILA 💝", "MI AMOR ETERNO 💕",
+    "MI DESTINO ✨", "MI FELICIDAD 💖", "MI INSPIRACIÓN 🌟", 
+    "MI COMPAÑERA 💑", "MI MEJOR AMIGA 💕", "MI ALMA GEMELA 💖",
+    "MI SUEÑO HECHO REALIDAD 💫", "MI TODO 💕", "MI VIDA ENTERA 💖",
+    "MI CORAZÓN LATIENDO 💓", "MI AMOR INFINITO 💕", "MI BELLEZA ÚNICA 💖",
+    "MI ANGELITO 👼", "MI ESTRELLA ⭐", "MI LUZ 💡", "MI SONRISA 😊",
+    "MI ALEGRÍA 🎉", "MI TESORO 💎", "MI PERFECCIÓN 💖", "MI AMOR VERDADERO 💕"
+];
 
 // --- UTILITY FUNCTIONS ---
 function random(min, max) {
@@ -20,24 +32,24 @@ class MainHeart {
     constructor() {
         this.x = canvas.width / 2;
         this.y = canvas.height / 2 + 100;
-        this.size = 30;
+        this.size = 35;
         this.scale = 1;
         this.angle = 0;
     }
 
     update() {
         this.angle += 0.03;
-        this.scale = 1 + Math.sin(this.angle) * 0.1; // Pulsing effect
-        this.y = canvas.height / 2 + 100 + Math.sin(this.angle * 0.5) * 10; // Gentle bobbing
+        this.scale = 1 + Math.sin(this.angle) * 0.15; // Enhanced pulsing effect
+        this.y = canvas.height / 2 + 100 + Math.sin(this.angle * 0.5) * 15; // More pronounced bobbing
     }
 
     draw() {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.scale(this.scale, this.scale);
-        ctx.fillStyle = 'red';
-        ctx.shadowColor = 'red';
-        ctx.shadowBlur = 15;
+        ctx.fillStyle = '#ff1493'; // Deep pink
+        ctx.shadowColor = '#ff1493';
+        ctx.shadowBlur = 20;
         this.drawHeartShape(0, 0, this.size);
         ctx.restore();
     }
@@ -62,7 +74,6 @@ class MainHeart {
     }
 }
 
-
 // --- PARTICLE CLASS ---
 class Particle {
     constructor(x, y) {
@@ -74,30 +85,35 @@ class Particle {
 
     getRandomType() {
         const rand = Math.random();
-        if (rand < 0.6) return 'star';
-        if (rand < 0.9) return 'heart';
+        if (rand < 0.4) return 'star';
+        if (rand < 0.7) return 'heart';
         return 'text';
     }
 
     setupByType() {
-        this.speedX = random(-0.2, 0.2);
-        this.speedY = random(-0.8, -0.1);
-        this.opacity = random(0.5, 1);
-        this.life = random(canvas.height * 0.5, canvas.height);
+        this.speedX = random(-0.3, 0.3);
+        this.speedY = random(-1.2, -0.2);
+        this.opacity = random(0.6, 1);
+        this.life = random(canvas.height * 0.6, canvas.height);
 
         switch (this.type) {
             case 'star':
-                this.size = random(1, 2.5);
+                this.size = random(1.5, 3);
                 this.color = `rgba(255, 255, 255, ${this.opacity})`;
                 this.speedY = 0; // Static stars
                 this.speedX = 0;
                 break;
             case 'heart':
-                this.size = random(5, 15);
-                this.color = `hsl(${random(330, 360)}, 100%, ${random(60, 80)}%)`;
+                this.size = random(8, 20);
+                // More vibrant heart colors
+                const heartColors = [
+                    '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493',
+                    '#ff69b4', '#ff007f', '#ff0080', '#ff1493', '#ff69b4'
+                ];
+                this.color = heartColors[Math.floor(Math.random() * heartColors.length)];
                 break;
             case 'text':
-                this.size = random(12, 16);
+                this.size = random(14, 18);
                 this.color = `rgba(255, 228, 225, ${this.opacity})`; // Misty Rose
                 this.textContent = loveWords[Math.floor(Math.random() * loveWords.length)];
                 break;
@@ -157,16 +173,22 @@ class Particle {
     }
 }
 
-
 // --- FIREWORK PARTICLE (for the explosion) ---
 class FireworkParticle extends Particle {
     constructor(x, y, angle) {
         super(x, y);
         this.type = 'heart';
-        this.size = random(8, 15);
-        this.color = `hsl(${random(0, 360)}, 100%, ${random(70, 90)}%)`; // Full rainbow spectrum
+        this.size = random(10, 18);
         
-        const speed = random(3, 6);
+        // Rainbow explosion colors
+        const explosionColors = [
+            '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493',
+            '#ff69b4', '#ff007f', '#ff0080', '#ff1493', '#ff69b4',
+            '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493'
+        ];
+        this.color = explosionColors[Math.floor(Math.random() * explosionColors.length)];
+        
+        const speed = random(4, 8);
         this.speedX = Math.cos(angle) * speed;
         this.speedY = Math.sin(angle) * speed;
 
@@ -181,10 +203,9 @@ class FireworkParticle extends Particle {
         this.speedY += this.gravity;
         this.x += this.speedX;
         this.y += this.speedY;
-        this.opacity -= 0.02;
+        this.opacity -= 0.015;
     }
 }
-
 
 // --- FIREWORK CLASS ---
 class Firework {
@@ -196,7 +217,7 @@ class Firework {
     }
 
     createExplosion() {
-        const particleCount = 200;
+        const particleCount = 250; // More particles for denser explosion
         
         // Heart shape explosion
         for (let i = 0; i < particleCount; i++) {
@@ -229,7 +250,7 @@ class Firework {
 // --- MAIN LOGIC ---
 function init() {
     particles = [];
-    const particleCount = 300; // More particles for a denser feel
+    const particleCount = 400; // More particles for denser feel
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
         const y = random(0, canvas.height);
@@ -240,7 +261,7 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Adjusted fade for effect
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Reduced fade for clearer particles
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach(p => {
@@ -263,37 +284,45 @@ function animate() {
 
 function drawText() {
     ctx.save();
-    const fontSize = Math.min(canvas.width * 0.1, 120);
+    const fontSize = Math.min(canvas.width * 0.12, 140);
     ctx.font = `italic bold ${fontSize}px ${fontName}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     
-    const scale = 1 + Math.sin(Date.now() / 400) * 0.03; // Breathing effect
+    const scale = 1 + Math.sin(Date.now() / 500) * 0.05; // Enhanced breathing effect
     const x = canvas.width / 2;
-    const y = canvas.height / 2 - 40; // Move main text up
+    const y = canvas.height / 2 - 50; // Move main text up
 
     ctx.translate(x, y);
     ctx.scale(scale, scale);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.shadowColor = 'hotpink';
-    ctx.shadowBlur = 30;
+    // Enhanced gradient effect for main text
+    const gradient = ctx.createLinearGradient(-100, -50, 100, 50);
+    gradient.addColorStop(0, '#ff1493');
+    gradient.addColorStop(0.5, '#ff69b4');
+    gradient.addColorStop(1, '#ff007f');
+    
+    ctx.fillStyle = gradient;
+    ctx.shadowColor = '#ff1493';
+    ctx.shadowBlur = 35;
     
     ctx.fillText(mainText, 0, 0);
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'hotpink';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#ff1493';
+    ctx.lineWidth = 3;
     ctx.strokeText(mainText, 0, 0);
     
     ctx.restore();
 
-    // Draw "My Lady"
+    // Draw "My Lady" with enhanced styling
     ctx.save();
-    ctx.font = `italic bold ${fontSize * 0.3}px ${fontName}`;
-    ctx.fillStyle = 'rgba(255, 228, 225, 0.8)';
+    ctx.font = `italic bold ${fontSize * 0.35}px ${fontName}`;
+    ctx.fillStyle = 'rgba(255, 228, 225, 0.9)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText("My Lady", canvas.width / 2, y + 60);
+    ctx.shadowColor = '#ff69b4';
+    ctx.shadowBlur = 15;
+    ctx.fillText("My Lady", canvas.width / 2, y + 80);
     ctx.restore();
 }
 
