@@ -8,6 +8,7 @@ let fireworks = [];
 let mainHeart;
 const mainText = "Te Amo";
 const fontName = 'Cormorant Garamond';
+const loveWords = ["MI NIÑA HERMOSA", "MY LOVE", "DUENDE MALVADA", "MI VIDA 💖", "MI CORAZÓN 💕", "BEAUTIFUL", "INTELIGENTE", "PRECIOSA", "CARIÑOSA", "AMABLE", "RISUEÑA", "ERES MI TODO", "MI MUNDO 🌍", "MI CIELO ⭐", "TALENTOSA", "DIVERTIDA", "ÚNICA", "MI REINA 👑"];
 
 // --- UTILITY FUNCTIONS ---
 function random(min, max) {
@@ -17,8 +18,8 @@ function random(min, max) {
 // --- MAIN FLOATING HEART CLASS ---
 class MainHeart {
     constructor() {
-        this.x = canvas.width / 2 + ctx.measureText(mainText).width / 2 + 80;
-        this.y = canvas.height / 2;
+        this.x = canvas.width / 2;
+        this.y = canvas.height / 2 + 100;
         this.size = 30;
         this.scale = 1;
         this.angle = 0;
@@ -27,7 +28,7 @@ class MainHeart {
     update() {
         this.angle += 0.03;
         this.scale = 1 + Math.sin(this.angle) * 0.1; // Pulsing effect
-        this.y = canvas.height / 2 + Math.sin(this.angle * 0.5) * 10; // Gentle bobbing
+        this.y = canvas.height / 2 + 100 + Math.sin(this.angle * 0.5) * 10; // Gentle bobbing
     }
 
     draw() {
@@ -56,8 +57,8 @@ class MainHeart {
     resize() {
          const fontSize = Math.min(canvas.width * 0.1, 120);
          ctx.font = `italic bold ${fontSize}px ${fontName}`;
-         this.x = canvas.width / 2 + ctx.measureText(mainText).width / 2 + 30;
-         this.y = canvas.height / 2;
+         this.x = canvas.width / 2;
+         this.y = canvas.height / 2 + 100;
     }
 }
 
@@ -96,8 +97,9 @@ class Particle {
                 this.color = `hsl(${random(330, 360)}, 100%, ${random(60, 80)}%)`;
                 break;
             case 'text':
-                this.size = random(10, 14);
-                this.color = `rgba(255, 182, 193, ${this.opacity})`; // Light Pink
+                this.size = random(12, 16);
+                this.color = `rgba(255, 228, 225, ${this.opacity})`; // Misty Rose
+                this.textContent = loveWords[Math.floor(Math.random() * loveWords.length)];
                 break;
         }
     }
@@ -136,7 +138,7 @@ class Particle {
             case 'text':
                 ctx.font = `bold ${this.size}px sans-serif`;
                 ctx.textAlign = 'center';
-                ctx.fillText('TE AMO', this.x, this.y);
+                ctx.fillText(this.textContent, this.x, this.y);
                 break;
         }
         ctx.restore();
@@ -162,7 +164,7 @@ class FireworkParticle extends Particle {
         super(x, y);
         this.type = 'heart';
         this.size = random(8, 15);
-        this.color = `hsl(${random(0, 60)}, 100%, ${random(70, 90)}%)`; // Pinks, Yellows, Reds
+        this.color = `hsl(${random(0, 360)}, 100%, ${random(70, 90)}%)`; // Full rainbow spectrum
         
         const speed = random(3, 6);
         this.speedX = Math.cos(angle) * speed;
@@ -268,7 +270,7 @@ function drawText() {
     
     const scale = 1 + Math.sin(Date.now() / 400) * 0.03; // Breathing effect
     const x = canvas.width / 2;
-    const y = canvas.height / 2;
+    const y = canvas.height / 2 - 40; // Move main text up
 
     ctx.translate(x, y);
     ctx.scale(scale, scale);
@@ -278,11 +280,20 @@ function drawText() {
     ctx.shadowBlur = 30;
     
     ctx.fillText(mainText, 0, 0);
-    ctx.shadowBlur = 0; // Remove shadow for the stroke
+    ctx.shadowBlur = 0;
     ctx.strokeStyle = 'hotpink';
     ctx.lineWidth = 2;
     ctx.strokeText(mainText, 0, 0);
     
+    ctx.restore();
+
+    // Draw "My Lady"
+    ctx.save();
+    ctx.font = `italic bold ${fontSize * 0.3}px ${fontName}`;
+    ctx.fillStyle = 'rgba(255, 228, 225, 0.8)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText("My Lady", canvas.width / 2, y + 60);
     ctx.restore();
 }
 
