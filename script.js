@@ -302,14 +302,14 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Dibujar estrellas primero
+    // Dibujar estrellas primero, ANTES del fondo semitransparente
     starParticles.forEach(s => {
         s.update();
         s.draw();
     });
+    // Ahora aplicar el fondo semitransparente solo para las partículas animadas
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Luego el resto de partículas
     particles.forEach(p => {
