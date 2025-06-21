@@ -11,6 +11,17 @@
 </head>
 <body>
     <canvas id="valentineCanvas"></canvas>
+    <audio id="bg-music" src="fondo.mp3" autoplay loop hidden></audio>
+    <script>
+      // Para asegurar reproducción automática en la mayoría de navegadores
+      window.addEventListener('click', function playMusicOnce() {
+        const audio = document.getElementById('bg-music');
+        if (audio) {
+          audio.play();
+          window.removeEventListener('click', playMusicOnce);
+        }
+      });
+    </script>
     <script src="script.js"></script>
 </body>
 </html> 
