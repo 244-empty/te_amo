@@ -85,9 +85,9 @@ class Particle {
 
     getRandomType() {
         const rand = Math.random();
-        if (rand < 0.4) return 'star';
-        if (rand < 0.7) return 'heart';
-        return 'text';
+        if (rand < 0.5) return 'star'; // 50% chance for a star
+        if (rand < 0.8) return 'heart'; // 30% chance for a heart
+        return 'text'; // 20% chance for text
     }
 
     setupByType() {
@@ -105,10 +105,10 @@ class Particle {
                 break;
             case 'heart':
                 this.size = random(8, 20);
-                // More vibrant heart colors
+                // More vibrant and varied heart colors
                 const heartColors = [
-                    '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493',
-                    '#ff69b4', '#ff007f', '#ff0080', '#ff1493', '#ff69b4'
+                    '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493', '#ff69b4',
+                    '#da70d6', '#ee82ee', '#dda0dd', '#ffc0cb' // Adding Orchid, Violet, Plum, and Pink
                 ];
                 this.color = heartColors[Math.floor(Math.random() * heartColors.length)];
                 break;
@@ -180,11 +180,12 @@ class FireworkParticle extends Particle {
         this.type = 'heart';
         this.size = random(10, 18);
         
-        // Rainbow explosion colors
+        // Brighter and more varied explosion colors
         const explosionColors = [
-            '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493',
-            '#ff69b4', '#ff007f', '#ff0080', '#ff1493', '#ff69b4',
-            '#ff1493', '#ff69b4', '#ff007f', '#ff0080', '#ff1493'
+            '#ff1493', '#ff69b4', '#ff007f', // Pinks
+            '#ffc0cb', '#ffb6c1', // Light Pinks
+            '#da70d6', '#ee82ee', '#dda0dd', // Purples
+            '#f0f8ff', '#e6e6fa' // Alice Blue & Lavender for contrast
         ];
         this.color = explosionColors[Math.floor(Math.random() * explosionColors.length)];
         
@@ -250,7 +251,7 @@ class Firework {
 // --- MAIN LOGIC ---
 function init() {
     particles = [];
-    const particleCount = 400; // More particles for denser feel
+    const particleCount = 150; // Reduced count to prevent crowding and improve performance
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
         const y = random(0, canvas.height);
@@ -261,7 +262,7 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Reduced fade for clearer particles
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; // Sharper trails, less blur
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach(p => {
