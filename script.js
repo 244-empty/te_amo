@@ -21,6 +21,8 @@ const loveWords = [
     "CONTIGO TODO ES MEJOR", "MI LUZ EN LA OSCURIDAD", "PENSANDO EN TI"
 ];
 
+let starParticles = [];
+
 // --- UTILITY FUNCTIONS ---
 function random(min, max) {
     return Math.random() * (max - min) + min;
@@ -252,10 +254,44 @@ class Firework {
     }
 }
 
+// --- STAR CLASS ---
+class Star {
+    constructor() {
+        this.x = random(0, canvas.width);
+        this.y = random(0, canvas.height);
+        this.size = random(1.5, 2.8);
+        this.baseAlpha = random(0.5, 1);
+        this.alpha = this.baseAlpha;
+        this.twinkleSpeed = random(0.005, 0.02);
+        this.twinklePhase = random(0, Math.PI * 2);
+    }
+    update() {
+        // Parpadeo suave
+        this.alpha = this.baseAlpha + Math.sin(Date.now() * this.twinkleSpeed + this.twinklePhase) * 0.3;
+        if (this.alpha < 0.1) this.alpha = 0.1;
+        if (this.alpha > 1) this.alpha = 1;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
 // --- MAIN LOGIC ---
 function init() {
+    // Estrellas de fondo
+    starParticles = [];
+    for (let i = 0; i < 120; i++) {
+        starParticles.push(new Star());
+    }
+    // Partículas flotantes
     particles = [];
-    const particleCount = 400; // Más partículas para un fondo más lleno
+    const particleCount = 300;
     for (let i = 0; i < particleCount; i++) {
         const x = random(0, canvas.width);
         const y = random(canvas.height, canvas.height + 500); 
@@ -266,9 +302,16 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; // Sharper trails, less blur
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Dibujar estrellas primero
+    starParticles.forEach(s => {
+        s.update();
+        s.draw();
+    });
+
+    // Luego el resto de partículas
     particles.forEach(p => {
         p.update();
         p.draw();
