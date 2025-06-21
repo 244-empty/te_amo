@@ -112,9 +112,9 @@ class Particle {
 
 // --- FIREWORK CLASS ---
 class Firework {
-    constructor() {
-        this.x = random(canvas.width * 0.2, canvas.width * 0.8);
-        this.y = random(canvas.height * 0.2, canvas.height * 0.5);
+    constructor(x, y) {
+        this.x = x || random(canvas.width * 0.2, canvas.width * 0.8);
+        this.y = y || random(canvas.height * 0.2, canvas.height * 0.5);
         this.particles = [];
         this.exploded = false;
         this.color = `hsl(${random(0, 50)}, 100%, ${random(70, 90)}%)`; // Yellows/Oranges for the burst
@@ -122,7 +122,7 @@ class Firework {
     }
 
     createExplosion() {
-        const particleCount = 100;
+        const particleCount = 150; // Increased particles for a fuller effect
         const angleIncrement = (Math.PI * 2) / particleCount;
 
         for (let i = 0; i < particleCount; i++) {
@@ -187,20 +187,12 @@ function init() {
         const y = random(0, canvas.height);
         particles.push(new Particle(x, y, isHeart));
     }
-    // Add an initial firework
-    setTimeout(addFirework, 1000);
+    // No more automatic fireworks
 }
-
-function addFirework() {
-    fireworks.push(new Firework());
-    // Schedule the next firework
-    setTimeout(addFirework, random(2000, 5000));
-}
-
 
 function animate() {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Slow fade effect
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; // Sharper trails, less blur
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw background particles
@@ -223,14 +215,29 @@ function animate() {
 
 function drawText() {
     ctx.save();
-    ctx.fillStyle = 'rgba(255, 105, 180, 0.9)'; // Hot pink, slightly transparent
-    ctx.shadowColor = 'rgba(255, 20, 147, 1)';
-    ctx.shadowBlur = 20;
+
+    // Create a gradient for the text
+    const gradient = ctx.createLinearGradient(0, canvas.height / 2 - 50, 0, canvas.height / 2 + 50);
+    gradient.addColorStop(0, '#ffc0cb'); // Light Pink
+    gradient.addColorStop(1, '#ff1493'); // Deep Pink
+
+    ctx.fillStyle = gradient;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.lineWidth = 1;
+    ctx.shadowColor = '#ff1493';
+    ctx.shadowBlur = 15; // Slightly reduced blur for sharpness
     const fontSize = canvas.width * 0.12;
-    ctx.font = `${fontSize}px ${fontName}`;
+    ctx.font = `bold ${fontSize}px ${fontName}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    
+    const textContent = text;
+    const x = canvas.width / 2;
+    const y = canvas.height / 2;
+
+    ctx.fillText(textContent, x, y);
+    ctx.strokeText(textContent, x, y);
+
     ctx.restore();
 }
 
@@ -242,6 +249,10 @@ window.addEventListener('resize', () => {
     particles = []; // Re-init particles on resize
     fireworks = [];
     init();
+});
+
+canvas.addEventListener('click', (e) => {
+    fireworks.push(new Firework(e.clientX, e.clientY));
 });
 
 // --- START ---
